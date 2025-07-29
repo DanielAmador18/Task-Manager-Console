@@ -13,7 +13,7 @@ namespace Listas
         }
     }
 
-
+    //cambio
     public class GestorTareas
     {
         List<Tarea> tareas = new List<Tarea>();    //Lista de objetos usando la clase Tarea
