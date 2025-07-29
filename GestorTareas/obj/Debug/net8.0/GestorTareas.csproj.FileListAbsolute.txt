@@ -1,0 +1,14 @@
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\bin\Debug\net8.0\GestorTareas.exe
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\bin\Debug\net8.0\GestorTareas.deps.json
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\bin\Debug\net8.0\GestorTareas.runtimeconfig.json
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\bin\Debug\net8.0\GestorTareas.dll
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\bin\Debug\net8.0\GestorTareas.pdb
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\obj\Debug\net8.0\GestorTareas.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\obj\Debug\net8.0\GestorTareas.AssemblyInfoInputs.cache
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\obj\Debug\net8.0\GestorTareas.AssemblyInfo.cs
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\obj\Debug\net8.0\GestorTareas.csproj.CoreCompileInputs.cache
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\obj\Debug\net8.0\GestorTareas.dll
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\obj\Debug\net8.0\refint\GestorTareas.dll
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\obj\Debug\net8.0\GestorTareas.pdb
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\obj\Debug\net8.0\GestorTareas.genruntimeconfig.cache
+C:\Users\Omega\source\repos\GestorTareas\GestorTareas\obj\Debug\net8.0\ref\GestorTareas.dll
