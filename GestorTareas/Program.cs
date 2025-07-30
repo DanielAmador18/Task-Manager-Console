@@ -45,7 +45,7 @@ namespace TaskManager
         public override void MarcarCompletada()
         {
             Completada = true;
-            Console.WriteLine("Tare personal marcada como completada");
+            Console.WriteLine("Tarea personal marcada como completada");
         }
 
     }
@@ -220,8 +220,6 @@ namespace TaskManager
         {
             Console.WriteLine("Gracias por usar el programa");
             System.Environment.Exit(0);
-            Console.ReadKey();
-
         }
     }
 
