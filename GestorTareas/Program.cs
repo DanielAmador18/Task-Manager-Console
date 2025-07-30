@@ -201,7 +201,6 @@ namespace Listas
                 if (indice >= 0 && indice < tareas.Count)
                 {
                     tareas[indice].MarcarCompletada();
-                    Console.WriteLine("Tarea marcada como completada.");
                 }
                 else
                 {
