@@ -13,16 +13,52 @@ namespace Listas
         }
     }
 
-    //cambio
+    public class Tarea
+    {
+        public string Descripcion { get; set; }
+
+        public bool Completada { get; set; } = false;
+
+        public virtual string MostrarInfo()
+        {
+            string estado = Completada ? "[*]" : "[ ]";
+            return $"{estado}.- {Descripcion}";
+        }
+
+        public virtual void MarcarCompletada()
+        {
+            Completada = true;
+            Console.WriteLine("Tare marcada como completada");
+        }
+
+    }
+
+    public class TareaPersonal : Tarea                  //Clase heredada de Tarea
+    {
+
+        public override string MostrarInfo()            //Permite llamar al metodo y sobreescribirlo
+        {
+            string estado = Completada ? "[*]" : "[ ]";
+            return $"{estado}.- {Descripcion}";
+        }
+
+        public override void MarcarCompletada()
+        {
+            Completada = true;
+            Console.WriteLine("Tare personal marcada como completada");
+        }
+
+    }
+
     public class GestorTareas
     {
         List<Tarea> tareas = new List<Tarea>();    //Lista de objetos usando la clase Tarea
-
+        
         public void MostrarMenu()
         {
             Console.WriteLine();
             Console.WriteLine("====BIENVENIDO====");
-            Console.WriteLine("1.-Añadir nueva tarea.");
+            Console.WriteLine("1.-Añadir tarea personal.");
             Console.WriteLine("2.-Mostrar tareas actuales.");
             Console.WriteLine("3.-Eliminar una tarea por numero.");
             Console.WriteLine("4.-Marcar como completada");
@@ -78,7 +114,7 @@ namespace Listas
         {
             Console.WriteLine("Ingresa la nueva tarea:");
             string desc = Console.ReadLine();
-            tareas.Add(new Tarea { Descripcion = desc });
+            tareas.Add(new TareaPersonal { Descripcion = desc });
             Console.WriteLine("Tarea añadida correctamente.");
             Console.ReadKey();
         }
@@ -96,9 +132,7 @@ namespace Listas
                 Console.WriteLine("Tareas actuales:");
                 for (int i = 0; i < tareas.Count; i++)
                 {
-                    string estado = tareas[i].Completada ? "[*]" : "[]";
-                    Console.WriteLine($"{estado}{i + 1}. {tareas[i].Descripcion}");
-
+                    Console.WriteLine($"{i + 1}. {tareas[i].MostrarInfo()}"); //Llama al metodo MostrarInfo sobreescrito dependiendo del tipo de objeto
                 }
             }
             Console.ReadKey();
@@ -142,6 +176,7 @@ namespace Listas
             Console.ReadKey();
         }
 
+        //Metodo que marca una tarea como completada
         public void MarcarCompletada()
         {
             if (tareas.Count == 0)
@@ -165,7 +200,7 @@ namespace Listas
                 indice--; // Ajustar al índice real
                 if (indice >= 0 && indice < tareas.Count)
                 {
-                    tareas[indice].Completada = true;
+                    tareas[indice].MarcarCompletada();
                     Console.WriteLine("Tarea marcada como completada.");
                 }
                 else
@@ -191,10 +226,4 @@ namespace Listas
         }
     }
 
-    public class Tarea
-    {
-        public string Descripcion { get; set; }
-
-        public bool Completada { get; set; } = false;
-    }
 }
