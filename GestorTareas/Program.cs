@@ -28,7 +28,7 @@ namespace TaskManager
         public virtual void MarcarCompletada()
         {
             Completada = true;
-            Console.WriteLine("Tare marcada como completada");
+            Console.WriteLine("Tarea marcada como completada");
         }
 
     }
@@ -50,6 +50,51 @@ namespace TaskManager
 
     }
 
+    public class TareaTrabajo : Tarea
+    {
+        public int Prioridad { get; set; } = 1;
+
+
+        public override string MostrarInfo()
+        {
+            string estado = Completada ? "[*]" : "[ ]";
+            string prioridadTexto = "";
+
+            if (Prioridad == 3)
+            {
+                prioridadTexto = "ALTA";
+            }
+            else if (Prioridad == 2)
+            {
+                prioridadTexto = "MEDIA";
+            }
+            else if(Prioridad == 1)
+            {
+                prioridadTexto = "BAJA";
+            }
+            else
+            {
+                Console.WriteLine("No hay prioridad Ingresada.");
+            }
+
+            return $"{estado}, [Prioridad :{prioridadTexto}] {Descripcion}";
+        }
+
+
+        public override void MarcarCompletada()
+        {
+            Completada = true;
+            if (Prioridad == 3)
+            {
+                Console.WriteLine("Tarea de alta prioridad marcada como completada.");
+            }
+            else
+            {
+                Console.WriteLine("Tarea de trabajo marcada como completada.");
+            }
+        }
+    }
+
     public class GestorTareas
     {
         List<Tarea> tareas = new List<Tarea>();    //Lista de objetos usando la clase Tarea
@@ -59,10 +104,11 @@ namespace TaskManager
             Console.WriteLine();
             Console.WriteLine("====BIENVENIDO====");
             Console.WriteLine("1.-Añadir tarea personal.");
-            Console.WriteLine("2.-Mostrar tareas actuales.");
-            Console.WriteLine("3.-Eliminar una tarea por numero.");
-            Console.WriteLine("4.-Marcar como completada");
-            Console.WriteLine("5.-Salir del programa.");
+            Console.WriteLine("2.-Añadir tarea de Trabajo.");
+            Console.WriteLine("3.-Mostrar tareas actuales.");
+            Console.WriteLine("4.-Eliminar una tarea por numero.");
+            Console.WriteLine("5.-Marcar como completada");
+            Console.WriteLine("6.-Salir del programa.");
         }
 
         public void EjecutarOpcion()
@@ -96,13 +142,15 @@ namespace TaskManager
             {
                 case 1: AñadirTarea(); break;
 
-                case 2: MostrarTareas(); break;
+                case 2: AñadirTareaTrabajo(); break;
 
-                case 3: EliminarTarea(); break;
+                case 3: MostrarTareas(); break;
 
-                case 4: MarcarCompletada(); break;
+                case 4: EliminarTarea(); break;
 
-                case 5:
+                case 5: MarcarCompletada(); break;
+
+                case 6:
                     Salir();
                     return false;
             }
@@ -116,6 +164,25 @@ namespace TaskManager
             string desc = Console.ReadLine();
             tareas.Add(new TareaPersonal { Descripcion = desc });
             Console.WriteLine("Tarea añadida correctamente.");
+            Console.ReadKey();
+        }
+
+        public void AñadirTareaTrabajo()
+        {
+            Console.WriteLine("Ingresa la nueva tarea de Trabajo:");
+            string desc = Console.ReadLine();
+
+            Console.WriteLine("Ingrese el nivel de prioridad: ");
+            string input = Console.ReadLine();
+
+            int prioridad = 1; //Por defecto la prioridad sera baja
+            if(int.TryParse(input, out int p) && (p>1 && p<3))
+            {
+                prioridad = p;
+            }
+ 
+            tareas.Add(new TareaTrabajo { Descripcion = desc, Prioridad = prioridad }); //Añade las propiedades al objeto de la lista
+            Console.WriteLine("Tarea de trabajo añadida correctamente.");
             Console.ReadKey();
         }
 
