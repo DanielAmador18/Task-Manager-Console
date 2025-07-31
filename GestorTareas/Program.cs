@@ -172,7 +172,7 @@ namespace TaskManager
             Console.WriteLine("Ingresa la nueva tarea de Trabajo:");
             string desc = Console.ReadLine();
 
-            Console.WriteLine("Ingrese el nivel de prioridad: ");
+            Console.WriteLine("Ingrese el nivel de prioridad (1.-BAJA, 2.-MEDIA, 3.-ALTA): ");
             string input = Console.ReadLine();
 
             int prioridad = 1; //Por defecto la prioridad sera baja
