@@ -7,10 +7,9 @@ Simple console application for task management built with C#.
 - View all tasks  
 - Delete tasks by number
 - Mark tasks as completed
+- Database connectivity
 
 ## Technologies Used
 - C# .NET
 - Console Application
 
-## Next Features
-- Database connectivity
