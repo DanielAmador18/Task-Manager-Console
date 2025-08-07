@@ -1,26 +1,28 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace TaskManager
 {
     class Program
-    {
+    { 
         static void Main(string[] args)
         {
             GestorTareas gestion = new GestorTareas();
-
             gestion.EjecutarOpcion();
         }
     }
 
     public class Tarea
     {
+        public int Id { get; set; }
         public string Descripcion { get; set; }
 
         public bool Completada { get; set; } = false;
 
         public virtual string MostrarInfo()
-        {
+        { 
             string estado = Completada ? "[*]" : "[ ]";
             return $"{estado}.- {Descripcion}";
         }
@@ -68,7 +70,7 @@ namespace TaskManager
             {
                 prioridadTexto = "MEDIA";
             }
-            else if(Prioridad == 1)
+            else if (Prioridad == 1)
             {
                 prioridadTexto = "BAJA";
             }
@@ -97,8 +99,22 @@ namespace TaskManager
 
     public class GestorTareas
     {
-        List<Tarea> tareas = new List<Tarea>();    //Lista de objetos usando la clase Tarea
-        
+
+        private readonly string connectionString;
+
+        public GestorTareas()
+        {
+
+            var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+
+            connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        }
+
+
         public void MostrarMenu()
         {
             Console.WriteLine();
@@ -158,12 +174,65 @@ namespace TaskManager
             return true; //Se devuelve true para que el bucle siga funcionando
         }
 
+
+        private List<Tarea> ObtenerTareasDeLaBD()
+        {
+            List<Tarea> tareas = new List<Tarea>();
+
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT Id, Descripcion, Completada, TipoTarea, Prioridad FROM Tareas ORDER BY Id";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string tipo = reader["TipoTarea"].ToString();
+
+                        Tarea tarea = TareaFactory.CrearTarea(tipo, reader);
+
+                        tarea.Id = (int)reader["Id"];
+                        tarea.Descripcion = reader["Descripcion"].ToString();
+                        tarea.Completada = (bool)reader["Completada"];
+
+                        tareas.Add(tarea);
+                    }
+
+                }
+            }
+            return tareas;
+        }
+
+
         public void AñadirTarea()
         {
             Console.WriteLine("Ingresa la nueva tarea:");
             string desc = Console.ReadLine();
-            tareas.Add(new TareaPersonal { Descripcion = desc });
-            Console.WriteLine("Tarea añadida correctamente.");
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "INSERT INTO Tareas (Descripcion, TipoTarea) VALUES (@desc, @tipo)";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@desc", desc);
+                        cmd.Parameters.AddWithValue("@tipo", "Personal");
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                Console.WriteLine("Tarea añadida correctamente");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al añadir la tarea: {ex.Message}");
+            }
             Console.ReadKey();
         }
 
@@ -176,110 +245,184 @@ namespace TaskManager
             string input = Console.ReadLine();
 
             int prioridad = 1; //Por defecto la prioridad sera baja
-            if(int.TryParse(input, out int p) && (p>1 && p<3))
+            if (int.TryParse(input, out int p) && (p >= 1 && p <= 3))
             {
                 prioridad = p;
             }
- 
-            tareas.Add(new TareaTrabajo { Descripcion = desc, Prioridad = prioridad }); //Añade las propiedades al objeto de la lista
-            Console.WriteLine("Tarea de trabajo añadida correctamente.");
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "INSERT INTO Tareas (Descripcion, TipoTarea, Prioridad) VALUES (@desc, @tipo, @prioridad)";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@desc", desc);
+                        cmd.Parameters.AddWithValue("@tipo", "Trabajo");
+                        cmd.Parameters.AddWithValue("@prioridad", prioridad);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                Console.WriteLine("Tarea de trabajo añadida correctamente.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al añadir la tarea: {ex.Message}");
+            }
+
             Console.ReadKey();
         }
 
         public void MostrarTareas()
         {
-            if (tareas.Count == 0)
+            try
             {
-                Console.WriteLine("Aun no hay tareas registradas.");
-                return;
+                List<Tarea> tareas = ObtenerTareasDeLaBD();
 
-            }
-            else
-            {
-                Console.WriteLine("Tareas actuales:");
-                for (int i = 0; i < tareas.Count; i++)
+                if (tareas.Count == 0)
                 {
-                    Console.WriteLine($"{i + 1}. {tareas[i].MostrarInfo()}"); //Llama al metodo MostrarInfo sobreescrito dependiendo del tipo de objeto
+                    Console.WriteLine("Aun no hay tareas registradas.");
+                    return;
+
                 }
+                else
+                {
+                    Console.WriteLine("Tareas actuales:");
+                    for (int i = 0; i < tareas.Count; i++)
+                    {
+                        Console.WriteLine($"{i + 1}. {tareas[i].MostrarInfo()}"); //Llama al metodo MostrarInfo sobreescrito dependiendo del tipo de objeto
+                    }
+                }
+                Console.ReadKey();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al mostrar tareas: {ex.Message}");
             }
             Console.ReadKey();
         }
 
         public void EliminarTarea()
         {
-            if (tareas.Count == 0)
+            try
             {
-                Console.WriteLine("Aun no hay tareas registradas.");
-                return;
+                List<Tarea> tareas = ObtenerTareasDeLaBD();
 
-            }
-            Console.WriteLine("Ingrese el numero de la tarea que desee eliminar.");
-
-            for (int i = 0; i < tareas.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {tareas[i].Descripcion}");
-            }
-
-            string input = Console.ReadLine();
-
-            if (int.TryParse(input, out int indice))
-            {
-                indice--;
-                if (indice >= 0 && indice < tareas.Count)
+                if (tareas.Count == 0)
                 {
-                    tareas.RemoveAt(indice);
-                    Console.WriteLine("Tarea eliminada correctamente");
+                    Console.WriteLine("Aun no hay tareas registradas.");
+                    return;
+
+                }
+                Console.WriteLine("Ingrese el numero de la tarea que desee eliminar.");
+
+                for (int i = 0; i < tareas.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {tareas[i].Descripcion}");
+                }
+
+                string input = Console.ReadLine();
+
+                if (int.TryParse(input, out int indice))
+                {
+                    indice--;
+                    if (indice >= 0 && indice < tareas.Count)
+                    {
+                        int idTarea = tareas[indice].Id;
+
+                        using (SqlConnection conn = new SqlConnection(connectionString))
+                        {
+                            conn.Open();
+
+                            string query = "DELETE FROM Tareas WHERE Id= @id";
+
+                            using (SqlCommand cmd = new SqlCommand(query, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@id", idTarea);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        Console.WriteLine("Tarea eliminada correctamente.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Indice fuera del rango");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Indice fuera del rango");
+                    Console.WriteLine("Entrada no valida");
                 }
+
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Entrada no valida");
+                Console.WriteLine($"Error al intentar eliminar la tarea indicada: {ex.Message}");
             }
 
-            Console.ReadKey();
         }
-
         //Metodo que marca una tarea como completada
         public void MarcarCompletada()
         {
-            if (tareas.Count == 0)
+            try
             {
-                Console.WriteLine("No hay tareas para marcar como completadas.");
-                Console.ReadKey();
-                return;
-            }
 
-            for (int i = 0; i < tareas.Count; i++)
-            {
-                string estado = tareas[i].Completada ? "[*]" : "[ ]";
-                Console.WriteLine($"{i + 1}.- {estado} {tareas[i].Descripcion}");
-            }
-
-            Console.WriteLine("Ingrese el número de la tarea que desea marcar como completada:");
-            string input = Console.ReadLine();
-
-            if (int.TryParse(input, out int indice))
-            {
-                indice--; // Ajustar al índice real
-                if (indice >= 0 && indice < tareas.Count)
+                List<Tarea> tareas = ObtenerTareasDeLaBD();
+                if (tareas.Count == 0)
                 {
-                    tareas[indice].MarcarCompletada();
+                    Console.WriteLine("No hay tareas para marcar como completadas.");
+                    Console.ReadKey();
+                    return;
+                }
+
+                for (int i = 0; i < tareas.Count; i++)
+                {
+                    string estado = tareas[i].Completada ? "[*]" : "[ ]";
+                    Console.WriteLine($"{i + 1}.- {estado} {tareas[i].Descripcion}");
+                }
+
+                Console.WriteLine("Ingrese el número de la tarea que desea marcar como completada:");
+                string input = Console.ReadLine();
+
+                if (int.TryParse(input, out int indice))
+                {
+                    indice--; // Ajustar al índice real
+                    if (indice >= 0 && indice < tareas.Count)
+                    {
+                        int IdTarea = tareas[indice].Id;
+
+                        using (SqlConnection conn = new SqlConnection(connectionString))
+                        {
+                            conn.Open();
+
+                            string query = "UPDATE Tareas SET Completada = 1 WHERE Id = @id";
+
+                            using (SqlCommand cmd = new SqlCommand(query, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@id", IdTarea);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Índice fuera de rango.");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Índice fuera de rango.");
+                    Console.WriteLine("Entrada no válida.");
                 }
-            }
-            else
-            {
-                Console.WriteLine("Entrada no válida.");
-            }
 
-            Console.ReadKey();
+                Console.ReadKey();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al marcar la Tarea: {ex.Message}");
+            }
         }
 
 
@@ -287,6 +430,22 @@ namespace TaskManager
         {
             Console.WriteLine("Gracias por usar el programa");
             System.Environment.Exit(0);
+        }
+    }
+
+    public class TareaFactory
+    {
+        public static Tarea CrearTarea(string tipo, SqlDataReader reader)
+        {
+            return tipo switch
+            {
+                "Personal" => new TareaPersonal(),
+                "Trabajo" => new TareaTrabajo
+                {
+                    Prioridad = reader["Prioridad"] != DBNull.Value ? (int)reader["Prioridad"] : 1  //Lee la prioridad otorgada, si es Null
+                },
+                _ => throw new ArgumentException($"Tipo de tarea '{tipo}' no valido.")
+            };
         }
     }
 
