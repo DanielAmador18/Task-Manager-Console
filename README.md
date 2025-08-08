@@ -12,4 +12,4 @@ Simple console application for task management built with C#.
 ## Technologies Used
 - C# .NET
 - Console Application
-
+- SQL server
