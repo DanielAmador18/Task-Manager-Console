@@ -10,7 +10,7 @@ Simple console application for task management built with C#.
 - Database connectivity
 
 ## Technologies Used
-- C# .NET
-- Console Application
+- C# 
+- .NET
 - SQL server
 - ADO.NET
