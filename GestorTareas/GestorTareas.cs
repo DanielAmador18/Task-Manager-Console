@@ -14,7 +14,7 @@ namespace Gestor
 
             var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) //Se adjunta el archivo que contiene el ConnectionString
             .Build();
 
             connectionString = configuration.GetConnectionString("DefaultConnection");

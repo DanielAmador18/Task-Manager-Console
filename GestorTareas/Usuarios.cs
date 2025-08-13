@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Users
+﻿namespace Users
 {
     public class Usuario
     {
         int Id { get; set; }
         string Nombre { get; set; }
-        string Contraseña { get; set; }
-
 
         public void Loggin()
         {
@@ -19,7 +11,7 @@ namespace Users
             Nombre = Console.ReadLine();
 
             Console.WriteLine("Contraseña:");
-            Contraseña = Console.ReadLine();
+            string Contraseña = Console.ReadLine();
         }
 
     }

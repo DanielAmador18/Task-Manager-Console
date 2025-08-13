@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
-using System;
-using Gestor;
-using ClaseTarea;
-using Microsoft.Extensions.Configuration;
+﻿using Gestor;
+using GestorU;
 
 namespace TaskManager
 {
     class Program
-    { 
+    {
         static void Main(string[] args)
         {
+            GestorUsuarios usuario = new GestorUsuarios();
+            usuario.ValidarNombre();
+
             GestorTareas gestion = new GestorTareas();
             gestion.EjecutarOpcion();
         }
