@@ -13,4 +13,4 @@ Simple console application for task management built with C#.
 - C# .NET
 - Console Application
 - SQL server
-ADO.NET
+- ADO.NET
