@@ -1,5 +1,6 @@
 ﻿using Gestor;
 using GestorU;
+using Users;
 
 namespace TaskManager
 {
@@ -7,8 +8,6 @@ namespace TaskManager
     {
         static void Main(string[] args)
         {
-            GestorUsuarios usuario = new GestorUsuarios();
-            usuario.ValidarNombre();
 
             GestorTareas gestion = new GestorTareas();
             gestion.EjecutarOpcion();

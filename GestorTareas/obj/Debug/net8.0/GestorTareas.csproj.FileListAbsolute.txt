@@ -89,3 +89,4 @@ C:\Users\Omega\Source\Repos\Task-Manager-Console\GestorTareas\bin\Debug\net8.0\S
 C:\Users\Omega\Source\Repos\Task-Manager-Console\GestorTareas\bin\Debug\net8.0\System.Text.Encodings.Web.dll
 C:\Users\Omega\Source\Repos\Task-Manager-Console\GestorTareas\bin\Debug\net8.0\System.Text.Json.dll
 C:\Users\Omega\Source\Repos\Task-Manager-Console\GestorTareas\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
+C:\Users\Omega\Source\Repos\Task-Manager-Console\GestorTareas\bin\Debug\net8.0\BCrypt.Net-Next.dll

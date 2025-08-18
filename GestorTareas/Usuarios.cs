@@ -1,4 +1,6 @@
-﻿namespace Users
+﻿using System.ComponentModel;
+
+namespace Users
 {
     public class Usuario
     {
@@ -7,11 +9,44 @@
 
         public void Loggin()
         {
-            Console.WriteLine("Nombre de usuario: ");
-            Nombre = Console.ReadLine();
+            ValidarNombre();
+            
+            ValidarContraseña();
+        }
 
-            Console.WriteLine("Contraseña:");
-            string Contraseña = Console.ReadLine();
+        public string ValidarNombre()
+        {
+            do
+            {
+                Console.WriteLine("Ingrese su nombre de usuario:");
+                Nombre = Console.ReadLine();
+
+                if(string.IsNullOrEmpty(Nombre))
+                {
+                    Console.WriteLine("El nombre no puede estar vacio, intente nuevamente");
+                }
+
+            } while (string.IsNullOrEmpty(Nombre));
+
+            return Nombre;
+        }
+
+        public string ValidarContraseña()
+        {
+            string Contraseña;
+            do
+            {
+                Console.WriteLine("Ingrese su contraseña:");
+                Contraseña = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(Contraseña))
+                {
+                    Console.WriteLine("El nombre no puede estar vacio, intente nuevamente");
+                }
+
+            } while (string.IsNullOrEmpty(Contraseña));
+
+            return Contraseña;
         }
 
     }

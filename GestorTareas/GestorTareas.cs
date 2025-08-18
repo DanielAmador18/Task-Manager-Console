@@ -1,14 +1,19 @@
 ﻿using ClaseTarea;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using GestorU;
+using GestorU;
 
 namespace Gestor
 {
     public class GestorTareas
     {
 
-        private readonly string connectionString;
 
+        //El Builder se usa principalmente para construir objetos complejos sin problemas.
+        //Resuelve varios inconvenientes que surgen cuando intentas crear objetos de otras maneras
+        private readonly string connectionString;
+        
         public GestorTareas()               //Configuracion del builder para la cadena de conexion
         {
 
@@ -18,6 +23,9 @@ namespace Gestor
             .Build();
 
             connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            GestorUsuarios user = new GestorUsuarios(connectionString);
+            user.Registro();
 
         }
 
@@ -49,7 +57,7 @@ namespace Gestor
 
                 if (int.TryParse(input, out int opc)) //Validar desde input y guardar valor en opc
                 {
-                    seguir = GestionarOpcion(opc);
+                    seguir = GestionarOpcion(opc); //Se utiliza opc como parametro
                 }
                 else
                 {
@@ -74,7 +82,7 @@ namespace Gestor
 
                 case 6:
                     Salir();
-                    return false;
+                    return false; //El bucle recibe false y termina su ejecucion
             }
 
             return true; //Se devuelve true para que el bucle siga funcionando
@@ -88,7 +96,8 @@ namespace Gestor
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                string query = "SELECT Id, Descripcion, Completada, TipoTarea, Prioridad FROM Tareas ORDER BY Id";
+                //Se inicializa un string que guardara la consulta 
+                string query = "SELECT Id, Descripcion, Completada, TipoTarea, Prioridad FROM Tareas ORDER BY Id"; 
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = cmd.ExecuteReader())
