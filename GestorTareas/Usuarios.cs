@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Users
+﻿namespace Users
 {
     public class Usuario
     {
@@ -14,7 +12,7 @@ namespace Users
                 Console.WriteLine("Ingrese su nombre de usuario:");
                 Nombre = Console.ReadLine();
 
-                if(string.IsNullOrEmpty(Nombre))
+                if (string.IsNullOrEmpty(Nombre))
                 {
                     Console.WriteLine("El nombre no puede estar vacio, intente nuevamente");
                 }

@@ -1,8 +1,6 @@
 ﻿using ClaseTarea;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using GestorU;
-using GestorU;
 
 namespace Gestor
 {
@@ -13,7 +11,7 @@ namespace Gestor
         //El Builder se usa principalmente para construir objetos complejos sin problemas.
         //Resuelve varios inconvenientes que surgen cuando intentas crear objetos de otras maneras
         private readonly string connectionString;
-        
+
         public GestorTareas()               //Configuracion del builder para la cadena de conexion
         {
 
@@ -24,7 +22,7 @@ namespace Gestor
 
             connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            
+
 
         }
 
@@ -97,7 +95,7 @@ namespace Gestor
             {
                 conn.Open();
                 //Se inicializa un string que guardara la consulta 
-                string query = "SELECT Id, Descripcion, Completada, TipoTarea, Prioridad FROM Tareas ORDER BY Id"; 
+                string query = "SELECT Id, Descripcion, Completada, TipoTarea, Prioridad FROM Tareas ORDER BY Id";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = cmd.ExecuteReader())

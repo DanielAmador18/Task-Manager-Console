@@ -8,7 +8,7 @@ Simple console application for task management built with C#.
 - Delete tasks by number
 - Mark tasks as completed
 - Database connectivity
-- Authentication System 
+- User Authentication System 
 
 ## Technologies Used
 - C# 

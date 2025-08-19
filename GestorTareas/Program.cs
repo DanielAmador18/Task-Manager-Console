@@ -1,6 +1,4 @@
-﻿using Gestor;
-using GestorU;
-using Users;
+﻿using GestorU;
 
 namespace TaskManager
 {
@@ -9,7 +7,7 @@ namespace TaskManager
         static void Main(string[] args)
         {
             GestorUsuarios user = new GestorUsuarios();
-            user.Inicio();
+            user.Inicio();   //Instancia que llama al metodo para iniciar el programa
         }
     }
 }
