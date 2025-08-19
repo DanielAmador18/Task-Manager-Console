@@ -7,13 +7,6 @@ namespace Users
         int Id { get; set; }
         string Nombre { get; set; }
 
-        public void Loggin()
-        {
-            ValidarNombre();
-            
-            ValidarContraseña();
-        }
-
         public string ValidarNombre()
         {
             do

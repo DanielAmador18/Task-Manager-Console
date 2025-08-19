@@ -24,10 +24,10 @@ namespace Gestor
 
             connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            GestorUsuarios user = new GestorUsuarios(connectionString);
-            user.Registro();
+            
 
         }
+
 
         public void MostrarMenu()
         {

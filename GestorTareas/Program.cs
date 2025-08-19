@@ -8,9 +8,8 @@ namespace TaskManager
     {
         static void Main(string[] args)
         {
-
-            GestorTareas gestion = new GestorTareas();
-            gestion.EjecutarOpcion();
+            GestorUsuarios user = new GestorUsuarios();
+            user.Inicio();
         }
     }
 }
