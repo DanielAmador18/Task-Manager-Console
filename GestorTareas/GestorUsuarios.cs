@@ -163,8 +163,8 @@ namespace GestorU
             }
             catch (Exception ex)
             {
-                Console.ReadKey();
                 Console.WriteLine("No se ha podido encontrar su cuenta " + ex.Message);
+                Console.ReadKey();
                 VolverInicio();
             }
         }
